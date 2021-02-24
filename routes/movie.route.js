@@ -75,21 +75,30 @@ router.get('/:movieId', (req, res,next) => {
                       next({message:"The movie was not found.(CATCH)",code:99});
                       res.json(errorMsg);});
 })
-//PUT a movie
-
-router.put('/:movieId',(req,res)=>{
- 
-  console.log("=====>>>>>>Movie Id to Update: "+req.params.movieId);
-
-  MovieModel.findOneAndUpdate(req.params.movieId,(err,data)=>{
-    console.log(data);
-    const movie=new MovieModel(req.body);
-    movie.save((err,data)=>{
-      if(err){res.json(err)}
-     return res.json(data);
+//PUT update a movie
+router.put('/:movieId', (req, res) => {
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Data to update can not be empty!"
     });
-})
-})
+  }
+  const id = req.params.movieId;
+  console.log(id);
+  MovieModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update Movie with id=${id}. Movie was not found!`
+        });
+      } else res.send({ message: " Movie was updated successfully." });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error updating Movie with id=" + id });
+    });
+});
+
+
 
 //delete a movie
 router.delete('/:movieId',(req,res)=>{
