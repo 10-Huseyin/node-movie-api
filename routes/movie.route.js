@@ -109,6 +109,11 @@ router.get('/:movieId', (req, res, next) => {
 //PUT update a movie,encoded by teacher
 //localhost:3000/api/movies/:movieId
 //XXXXXX.findByIdAndUpdate("_id",req.body).YYYYYYYYYYY
+
+/*Eğer ki şarta uyan tüm verilerde update işlemini uygulamak istiyorsanız sorguya “multi : true” değerini aşağıdaki gibi belirtmeniz gerekmektedir.
+Upsert Anahtar Kelimesi
+Yapacağımız güncelleme işlemlerinde eğer ki şarta uygun veri varsa ilgili işlemi icra edebiliriz. Ya yoksa! ve böyle bir durumda olmayan veriyi kaydetmek istiyorsak! Evet… Bu işlemi kontrollerle sağlayabiliriz lakin Upsert keywordü tam da bu ihtiyaca istinaden üretilmiş bir işlevselliğe sahiptir.
+*/
 router.put('/:movieId',(req,res,next)=>{
   MovieModel.findByIdAndUpdate(req.params.movieId,req.body,{new:true})
                   .then((data)=>{res.json(data)})
@@ -127,7 +132,6 @@ router.delete('/:movieId',(req,res,next)=>{
                   res.json(err)
               })
 })
-
 
 //delete a movie encoded by me
 // router.delete('/:movieId', (req, res,next) => {
